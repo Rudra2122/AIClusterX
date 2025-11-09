@@ -81,19 +81,26 @@ Impact: Reduced load variance by 23 %, enabling energy-adaptive dispatch.
 
 • 100 % env parity (local/dev/prod).
 
-Impact: 95 % faster setup vs manual orchestration; fully reproducible.
+✅ **Impact:** 95 % faster setup vs manual orchestration; fully reproducible.  
 
-🧪 Resilience & Benchmark Results
-Metric	                        Result
-Avg Latency (p90)	            0.19 s
-Scheduler Decisions/s	        0.34
-SLO Violations	                0
-Worker Utilization	            0.82
-Power Draw	                    23.4 W avg
-Job Cost	                    $0.0011
-Recovery Time (Post-Crash)	    < 5 s
 
-🧭 Stress-tested with synthetic PyTorch DDP workloads and locust load profiles to mimic multi-node GPU training behavior.
+## 🧪 Resilience & Benchmark Results
+
+| ⚙️ **Metric**                     | 📈 **Result**              | 💡 **Notes** |
+|----------------------------------|-----------------------------|--------------|
+| ⏱ **Avg Latency (p90)**          | **0.19 s**                 | Under sustained multi-node load |
+| 🧮 **Scheduler Decisions / s**   | **0.34**                   | Measured via Prometheus query rate |
+| 🚫 **SLO Violations**            | **0 / 1 000+ runs**         | Zero deadline misses |
+| 💪 **Worker Utilization**        | **0.82**                   | 82 % average active time |
+| ⚡ **Power Draw (avg)**           | **23.4 W**                 | Simulated GPU telemetry exporter |
+| 💰 **Job Cost (avg)**             | **$ 0.0011**               | Predictable FinOps cost model |
+| 🔄 **Recovery Time (post-crash)** | **< 5 s**                   | Automatic re-queue + retry mechanism |
+
+---
+
+🎯 **Stress Test:**  
+Synthetic **PyTorch DDP** workloads + **Locust** load profiles to emulate **multi-node GPU training** conditions.
+
 
 
 <h3 align="center">🖥️ Grafana Monitoring Preview</h3>
