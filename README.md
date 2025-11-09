@@ -1,7 +1,5 @@
 # ⚙️ AIClusterX — Distributed AI Infrastructure Cloud (Mini NVIDIA Cloud)
 
-
-
 ## 🚀 Executive Summary
 
 AIClusterX is a **containerized AI infrastructure cloud** that models how hyperscalers such as **NVIDIA DGX Cloud**, **Google TPU Pods**, and **Microsoft Azure AI** manage distributed training workloads.  
