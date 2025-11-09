@@ -132,8 +132,10 @@ AIClusterX/
 ├── demo.sh
 └── README.md
 ```
-```bash
+
 🏗️ Architecture Overview
+
+```bash
           ┌───────────────────────────┐
           │       FastAPI Gateway     │
           │   /submit  /status  /metrics
@@ -231,6 +233,8 @@ curl http://localhost:8000/status/<job_id>
 🧩 DevOps Maturity: CI/CD stack · K8s ready · 95 % setup time reduction.
 
 
+
+
 🧭 Future Extensions
 
 ✅ PyTorch DDP multi-node mock workloads
@@ -246,9 +250,13 @@ curl http://localhost:8000/status/<job_id>
 🔜 Web control panel (React + FastAPI)
 
 
+
+
 ⭐ In One Line
 
 AIClusterX is a miniature production AI cloud — observable, fault-tolerant, and quantitatively engineered for scale.
+
+
 
 
 ## 👤 Author
