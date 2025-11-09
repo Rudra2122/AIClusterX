@@ -1,6 +1,6 @@
 # ⚙️ AIClusterX — Distributed AI Infrastructure Cloud (Mini NVIDIA Cloud)
 
----
+
 
 ## 🚀 Executive Summary
 
@@ -12,7 +12,7 @@ It provides **intelligent job scheduling**, **telemetry**, and **energy-aware mo
 **Focus Areas:** Distributed AI Systems · MLOps · Observability · Cluster Scheduling  
 
 
----
+
 
 ## 🧠 Vision
 
@@ -21,7 +21,7 @@ AIClusterX bridges **research** and **production** by simulating the scheduling 
 Every service exposes metrics and recovery paths that reflect how large AI labs maintain throughput and efficiency at scale.
 
 
----
+
 
 ## 🌟 Key Highlights (Quantified Impact)
 
