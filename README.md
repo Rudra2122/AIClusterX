@@ -200,16 +200,19 @@ curl -X POST http://localhost:8000/submit \
 
 curl http://localhost:8000/status/<job_id>
 ```
-🧰 Tech Stack
 
-Layer	            Technology
-Core                Python 3.10 · Asyncio · FastAPI
-Queue	            Redis
-ML Simulation	    PyTorch-like Mock Jobs
-Monitoring	        Prometheus + Grafana
-Containerization	Docker Compose
-Future	            Kubernetes (HPA · Node Autoscaling)
+```md
+## 🧰 Tech Stack
 
+| Layer | Technology |
+|------|------------|
+| Core | Python 3.10 · Asyncio · FastAPI |
+| Queue | Redis |
+| ML Simulation | PyTorch-like Mock Jobs |
+| Monitoring | Prometheus + Grafana |
+| Containerization | Docker Compose |
+| Future | Kubernetes (HPA · Node Autoscaling) |
+```
 
 🧠 Why This Is an MNC-Level Project
 
@@ -248,8 +251,10 @@ Future	            Kubernetes (HPA · Node Autoscaling)
 AIClusterX is a miniature production AI cloud — observable, fault-tolerant, and quantitatively engineered for scale.
 
 
-👤 Author
+## 👤 Author
 
-Rudra Brahmbhatt
-🧩 AI Infrastructure & MLOps Engineer | Distributed Systems · Scalable AI Cloud Architecture · Telemetry & Orchestration
-🎓 M.S. Computer Science · Texas State University
+**Rudra Brahmbhatt**  
+🧩 AI Infrastructure & MLOps Engineer · Distributed Systems · Scalable AI Cloud Architecture · Telemetry & Orchestration  
+🎓 M.S. Computer Science · Texas State University  
+🌐 [LinkedIn](https://www.linkedin.com/in/rudra2122/) 
+
