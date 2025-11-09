@@ -167,7 +167,7 @@ AIClusterX/
              └─────────────────┘
 ```
 
-⚡ Quick Start
+## ⚡ Quick Start 
 ```bash
 # 1️⃣ Clone
 
@@ -181,15 +181,16 @@ docker compose up --build
 docker compose ps
 ```
 
-Access Endpoints
+## Access Endpoints
 
+```bash
 FastAPI: http://localhost:8000/docs
 
 Prometheus: http://localhost:9090
 
 Grafana: http://localhost:3000
  (admin/admin)
- 
+ ```
 
 🔍 Demo Workflow
 ```bash
@@ -218,38 +219,37 @@ curl http://localhost:8000/status/<job_id>
 > ⚡ Designed for distributed AI infrastructure — low-latency, scalable, and observability-driven.
 
 
-🧠 Why This Is an MNC-Level Project 
+## 🧠 Why This Is an MNC-Level Project
 
-🧱 Microservice Architecture: 5 decoupled containers mirroring NVIDIA/Google infra patterns.
+🧩 **Microservice Architecture:** 5 decoupled containers mirroring NVIDIA/Google infra patterns.  
 
-⚙️ Scalability: Handles 1 000 + jobs with 0.91× scaling efficiency.
+⚙️ **Scalability:** Handles 1 000 + jobs with 0.91× scaling efficiency.  
 
-📡 Observability: 20 + metrics/service · p99 visibility · 200 ms scrape latency.
+📡 **Observability:** 20 + metrics / service · p99 visibility · 200 ms scrape latency.  
 
-🔁 Reliability: 100 % delivery · < 5 s failover · automatic re-queue.
+🧱 **Reliability:** 100 % delivery · < 5 s failover · automatic re-queue.  
 
-💰 Cost Awareness: Predictable $ 0.0011 avg/job cost.
+💰 **Cost Awareness:** Predictable $ 0.0011 avg / job cost.  
 
-⚡ Energy Efficiency: 23 % lower load variance.
+⚡ **Energy Efficiency:** 23 % lower load variance.  
 
-🧩 DevOps Maturity: CI/CD stack · K8s ready · 95 % setup time reduction.
-
-
+🧑‍💻 **DevOps Maturity:** CI/CD stack · K8s ready · 95 % setup time reduction.  
 
 
-🧭 Future Extensions
 
-✅ PyTorch DDP multi-node mock workloads
+## 🧭 Future Extensions
 
-✅ Deadline-aware scheduling & metrics
+✅ **PyTorch DDP multi-node mock workloads**  
 
-🔜 Kubernetes + Horizontal Pod Autoscaler
+✅ **Deadline-aware scheduling & metrics**  
 
-🔜 RL-based dynamic scheduler (Deep Q Policy)
+🐋 **Kubernetes + Horizontal Pod Autoscaler**  
 
-🔜 Real GPU telemetry via nvidia-smi
+🧠 **RL-based dynamic scheduler (Deep Q policy)**  
 
-🔜 Web control panel (React + FastAPI)
+⚙️ **GPU telemetry via nvidia-smi**  
+
+🌐 **Web control panel (React + FastAPI)**  
 
 
 
