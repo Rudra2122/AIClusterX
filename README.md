@@ -11,13 +11,11 @@ It provides **intelligent job scheduling**, **telemetry**, and **energy-aware mo
 
 
 
-
 ## 🧠 Vision
 
 AIClusterX bridges **research** and **production** by simulating the scheduling backbone of real AI training platforms — resource-aware, self-healing, and fully observable.  
 
 Every service exposes metrics and recovery paths that reflect how large AI labs maintain throughput and efficiency at scale.
-
 
 
 
@@ -243,7 +241,7 @@ curl http://localhost:8000/status/<job_id>
 
 🧑‍💻 **DevOps Maturity:** CI/CD stack · K8s ready · 95 % setup time reduction.  
 
----
+
 
 ## 🧭 Future Extensions
 
@@ -260,14 +258,12 @@ curl http://localhost:8000/status/<job_id>
 🌐 **Web control panel (React + FastAPI)**  
 
 
----
 
 ## ⭐ In One Line
 
 AIClusterX is a miniature production AI cloud — observable, fault-tolerant, and quantitatively engineered for scale.
 
 
----
 
 ## 👤 Author
 
