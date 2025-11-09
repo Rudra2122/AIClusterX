@@ -1,19 +1,29 @@
-⚙️ AIClusterX — Distributed AI Infrastructure Cloud (Mini NVIDIA Cloud)
+# ⚙️ AIClusterX — Distributed AI Infrastructure Cloud (Mini NVIDIA Cloud)
 
-🚀 Executive Summary
+---
 
-AIClusterX is a containerized AI infrastructure cloud that models how hyperscalers such as NVIDIA DGX Cloud, Google TPU Pods, and Microsoft Azure AI manage distributed training workloads.
-It provides intelligent job scheduling, telemetry, and energy-aware monitoring — achieving measurable efficiency and scalability comparable to production AI clusters.
+## 🚀 Executive Summary
 
-Built With: FastAPI · Redis · Prometheus · Grafana · Docker Compose
-Focus Areas: Distributed AI Systems · MLOps · Observability · Cluster Scheduling
+AIClusterX is a **containerized AI infrastructure cloud** that models how hyperscalers such as **NVIDIA DGX Cloud**, **Google TPU Pods**, and **Microsoft Azure AI** manage distributed training workloads.  
 
-🧠 Vision
+It provides **intelligent job scheduling**, **telemetry**, and **energy-aware monitoring** — achieving measurable efficiency and scalability comparable to production AI clusters.
 
-AIClusterX bridges research and production by simulating the scheduling backbone of real AI training platforms — resource-aware, self-healing, and observable.
+**Built With:** FastAPI · Redis · Prometheus · Grafana · Docker Compose  
+**Focus Areas:** Distributed AI Systems · MLOps · Observability · Cluster Scheduling  
+
+
+---
+
+## 🧠 Vision
+
+AIClusterX bridges **research** and **production** by simulating the scheduling backbone of real AI training platforms — resource-aware, self-healing, and fully observable.  
+
 Every service exposes metrics and recovery paths that reflect how large AI labs maintain throughput and efficiency at scale.
 
-🌟 Key Highlights (Quantified Impact)
+
+---
+
+## 🌟 Key Highlights (Quantified Impact)
 
 🏗️ 1. Architecture — Modular Microservices (Decoupled & Scalable)
 
@@ -183,14 +193,14 @@ docker compose ps
 
 ## Access Endpoints
 
-```bash
+
 FastAPI: http://localhost:8000/docs
 
 Prometheus: http://localhost:9090
 
 Grafana: http://localhost:3000
  (admin/admin)
- ```
+
 
 🔍 Demo Workflow
 ```bash
@@ -235,7 +245,7 @@ curl http://localhost:8000/status/<job_id>
 
 🧑‍💻 **DevOps Maturity:** CI/CD stack · K8s ready · 95 % setup time reduction.  
 
-
+---
 
 ## 🧭 Future Extensions
 
@@ -252,14 +262,14 @@ curl http://localhost:8000/status/<job_id>
 🌐 **Web control panel (React + FastAPI)**  
 
 
+---
 
-
-⭐ In One Line
+## ⭐ In One Line
 
 AIClusterX is a miniature production AI cloud — observable, fault-tolerant, and quantitatively engineered for scale.
 
 
-
+---
 
 ## 👤 Author
 
