@@ -133,7 +133,8 @@ AIClusterX/
 └── README.md
 ```
 
-🏗️ Architecture Overview
+
+## 🏗️ FArchitecture Overview
 
 ```bash
           ┌───────────────────────────┐
@@ -203,20 +204,21 @@ curl -X POST http://localhost:8000/submit \
 curl http://localhost:8000/status/<job_id>
 ```
 
-```md
 ## 🧰 Tech Stack
 
-| Layer | Technology |
-|------|------------|
-| Core | Python 3.10 · Asyncio · FastAPI |
-| Queue | Redis |
-| ML Simulation | PyTorch-like Mock Jobs |
-| Monitoring | Prometheus + Grafana |
-| Containerization | Docker Compose |
-| Future | Kubernetes (HPA · Node Autoscaling) |
-```
+| **Layer**            | **Technology Used**                                  |
+|----------------------|------------------------------------------------------|
+| 🧠 **Core**           | Python 3.10 · AsyncIO · FastAPI                     |
+| ⚙️ **Queue**          | Redis (Pub/Sub for inter-service communication)     |
+| 🧩 **ML Simulation**  | PyTorch-like mock jobs · Distributed DDP simulator  |
+| 📊 **Monitoring**     | Prometheus (metrics) + Grafana (dashboards)         |
+| 🐳 **Containerization** | Docker Compose · Multi-service stack               |
+| ☁️ **Future Ready**   | Kubernetes (HPA + Node Autoscaling)                 |
 
-🧠 Why This Is an MNC-Level Project
+> ⚡ Designed for distributed AI infrastructure — low-latency, scalable, and observability-driven.
+
+
+🧠 Why This Is an MNC-Level Project 
 
 🧱 Microservice Architecture: 5 decoupled containers mirroring NVIDIA/Google infra patterns.
 
