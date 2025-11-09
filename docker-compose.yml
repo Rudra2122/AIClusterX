@@ -1,0 +1,60 @@
+version: "3.8"
+services:
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+    command: ["redis-server","--appendonly","yes"]
+
+  api:
+    build:
+      context: .                # <-- project root
+      dockerfile: services/api/Dockerfile
+    depends_on: [redis]
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - SLO_DEADLINE_SEC=10
+    ports: ["8000:8000"]
+
+  scheduler:
+    build:
+      context: .
+      dockerfile: services/scheduler/Dockerfile
+    depends_on: [redis]
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    ports: ["9100:9100"]
+
+  worker1:
+    build:
+      context: .
+      dockerfile: services/worker/Dockerfile
+    depends_on: [redis]
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - WORKER_ID=worker1
+    ports: ["9201:9200"]
+
+  worker2:
+    build:
+      context: .
+      dockerfile: services/worker/Dockerfile
+    depends_on: [redis]
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - WORKER_ID=worker2
+    ports: ["9202:9200"]
+
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command: ["--config.file=/etc/prometheus/prometheus.yml"]
+    ports: ["9090:9090"]
+    depends_on: [api, scheduler, worker1, worker2]
+
+  grafana:
+    image: grafana/grafana-oss:latest
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    ports: ["3000:3000"]
+    depends_on: [prometheus]
