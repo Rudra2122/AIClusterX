@@ -100,7 +100,9 @@ Recovery Time (Post-Crash)	    < 5 s
   <em>Live observability dashboard — real-time job queue lengths, latency histograms, power draw, and cost metrics.</em>
 </p>
 
-🧩 Folder Structure
+## 🧩 Folder Structure
+
+```bash
 AIClusterX/
 ├── docker-compose.yml
 ├── prometheus/
