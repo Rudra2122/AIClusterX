@@ -131,8 +131,8 @@ AIClusterX/
 │   └── hpa.yaml
 ├── demo.sh
 └── README.md
-
-
+```
+```bash
 🏗️ Architecture Overview
           ┌───────────────────────────┐
           │       FastAPI Gateway     │
@@ -162,10 +162,10 @@ AIClusterX/
              ┌─────────────────┐
              │    Grafana      │
              └─────────────────┘
-
+```
 
 ⚡ Quick Start
-
+```bash
 # 1️⃣ Clone
 
 git clone https://github.com/<your-username>/AIClusterX.git
@@ -176,7 +176,7 @@ docker compose up --build
 
 # 3️⃣ Check containers
 docker compose ps
-
+```
 
 Access Endpoints
 
@@ -186,9 +186,10 @@ Prometheus: http://localhost:9090
 
 Grafana: http://localhost:3000
  (admin/admin)
+ 
 
 🔍 Demo Workflow
-
+```bash
 # Submit Job
 
 curl -X POST http://localhost:8000/submit \
@@ -198,7 +199,7 @@ curl -X POST http://localhost:8000/submit \
 # Check Status
 
 curl http://localhost:8000/status/<job_id>
-
+```
 🧰 Tech Stack
 
 Layer	            Technology
