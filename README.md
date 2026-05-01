@@ -427,16 +427,11 @@ python -m services.mcp_server.server
 
 ## Future Extensions
 
-- [x] PyTorch DDP multi-node mock workloads
-- [x] Deadline-aware scheduling & SLO metrics
-- [x] LangGraph ReAct agentic orchestration
-- [x] Google ADK hierarchical multi-agent system
-- [x] MCP server (Claude Desktop + HTTP)
-- [ ] Kubernetes + Horizontal Pod Autoscaler
-- [ ] RL-based dynamic scheduler (Deep Q policy)
-- [ ] GPU telemetry via nvidia-smi
-- [ ] Web control panel (React + FastAPI)
-- [ ] WebSocket streaming for real-time agent trace
+- Kubernetes + Horizontal Pod Autoscaler
+- RL-based dynamic scheduler (Deep Q policy)
+- GPU telemetry via nvidia-smi
+- Web control panel (React + FastAPI)
+- WebSocket streaming for real-time agent trace
 
 ---
 
