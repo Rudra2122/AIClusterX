@@ -1,0 +1,10 @@
+langgraph>=0.2.0
+langchain>=0.3.0
+langchain-openai>=0.2.0
+langchain-core>=0.3.0
+google-adk>=0.3.0
+litellm>=1.40.0
+mcp>=1.0.0
+fastmcp>=2.0.0
+redis>=5.0.0
+openai>=1.30.0
