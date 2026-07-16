@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler
+  namespace: aiclusterx
+  labels: { app: scheduler }
+spec:
+  # Kept at 1 replica: the scheduler assigns jobs to workers via non-transactional
+  # read-then-write Redis calls (see _best_worker/_queue_pop_with_deadline in
+  # services/scheduler/main.py). Running >1 replica is safe from Redis's point of
+  # view (each op is atomic) but two schedulers could both pick the same "least
+  # loaded" worker in the same tick, so it's not scaled here.
+  replicas: 1
+  selector:
+    matchLabels: { app: scheduler }
+  template:
+    metadata:
+      labels: { app: scheduler }
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9100"
+        prometheus.io/path: "/"
+    spec:
+      containers:
+        - name: scheduler
+          image: aiclusterx-scheduler:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9100
+          envFrom:
+            - configMapRef: { name: aiclusterx-config }
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits: { cpu: "500m", memory: "256Mi" }
+          readinessProbe:
+            tcpSocket: { port: 9100 }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: 9100 }
+            initialDelaySeconds: 10
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: scheduler
+  namespace: aiclusterx
+spec:
+  selector: { app: scheduler }
+  ports:
+    - port: 9100
+      targetPort: 9100

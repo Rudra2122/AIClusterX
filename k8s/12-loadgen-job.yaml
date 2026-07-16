@@ -1,0 +1,35 @@
+# Not part of the core deployment — run this on demand to generate enough CPU
+# load on the workers to trigger the HPA, so you can watch/screenshot it scaling:
+#
+#   kubectl apply -f k8s/12-loadgen-job.yaml
+#   kubectl get hpa worker-hpa -n aiclusterx --watch
+#   kubectl get pods -n aiclusterx -l app=worker --watch
+#
+# Clean up afterwards with: kubectl delete job loadgen -n aiclusterx
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: loadgen
+  namespace: aiclusterx
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: loadgen
+          image: curlimages/curl:8.10.1
+          command:
+            - sh
+            - -c
+            - |
+              echo "Submitting 400 CPU-heavy jobs to trigger the worker HPA..."
+              for i in $(seq 1 400); do
+                curl -s -X POST http://api:8000/submit \
+                  -H "Content-Type: application/json" \
+                  -d '{"workload":"torch_cnn","size":128,"iterations":200,"priority":"high","deadline_sec":30}' \
+                  -o /dev/null &
+                if [ $(($i % 20)) -eq 0 ]; then wait; fi
+              done
+              wait
+              echo "Done submitting."

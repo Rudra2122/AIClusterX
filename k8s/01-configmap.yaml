@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aiclusterx-config
+  namespace: aiclusterx
+data:
+  # Matches docker-compose's service DNS names 1:1 so no code changes are needed —
+  # in-cluster DNS resolves "redis" to the Redis Service below.
+  REDIS_URL: "redis://redis:6379/0"
+  SLO_DEADLINE_SEC: "10"

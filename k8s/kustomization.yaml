@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: aiclusterx
+resources:
+  - 00-namespace.yaml
+  - 01-configmap.yaml
+  # Secret is deliberately NOT listed here so a real key never ends up in a
+  # committed file. Create it with `kubectl create secret ...` (see DEPLOY.md
+  # step 5) before running `kubectl apply -k k8s/`.
+  - 03-redis.yaml
+  - 04-api.yaml
+  - 05-scheduler.yaml
+  - 06-worker.yaml
+  - 07-worker-hpa.yaml
+  - 08-prometheus-rbac.yaml
+  - 09-prometheus-config.yaml
+  - 10-prometheus.yaml
+  - 11-grafana.yaml

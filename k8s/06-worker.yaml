@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+  namespace: aiclusterx
+  labels: { app: worker }
+spec:
+  # docker-compose hardcoded WORKER_ID=worker1/worker2 as two separate services.
+  # A Deployment's pods all share one PodSpec, so a static WORKER_ID would collide
+  # across replicas (they'd stomp each other's heartbeat/inflight keys in Redis,
+  # see services/worker/main.py's heartbeat()/pop_job_for_worker()). Instead we
+  # derive a unique WORKER_ID per pod from the pod name via the downward API —
+  # this is what actually makes the worker fleet safe to scale via HPA.
+  replicas: 2
+  selector:
+    matchLabels: { app: worker }
+  template:
+    metadata:
+      labels: { app: worker }
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9200"
+        prometheus.io/path: "/"
+    spec:
+      containers:
+        - name: worker
+          image: aiclusterx-worker:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9200
+          envFrom:
+            - configMapRef: { name: aiclusterx-config }
+          env:
+            - name: WORKER_ID
+              valueFrom:
+                fieldRef: { fieldPath: metadata.name }
+          resources:
+            requests: { cpu: "200m", memory: "384Mi" }
+            limits: { cpu: "1", memory: "768Mi" }
+          readinessProbe:
+            tcpSocket: { port: 9200 }
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            tcpSocket: { port: 9200 }
+            initialDelaySeconds: 10
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker
+  namespace: aiclusterx
+spec:
+  # Not used for Prometheus scraping (pod-based service discovery handles that so
+  # every replica gets scraped individually, not just whichever pod a ClusterIP
+  # happens to load-balance to) — kept around for direct debugging/port-forward.
+  selector: { app: worker }
+  ports:
+    - port: 9200
+      targetPort: 9200

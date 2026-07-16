@@ -316,9 +316,22 @@ AIClusterX/
 │       └── models.py            ← Pydantic schemas
 ├── gpu-power-exporter/
 │   └── main.py
-├── k8s/ (future)
-│   ├── deployment.yaml
-│   └── hpa.yaml
+├── k8s/                          ← Kubernetes manifests (deployed + verified, see below)
+│   ├── 00-namespace.yaml
+│   ├── 01-configmap.yaml
+│   ├── 02-secret.example.yaml
+│   ├── 03-redis.yaml
+│   ├── 04-api.yaml
+│   ├── 05-scheduler.yaml
+│   ├── 06-worker.yaml
+│   ├── 07-worker-hpa.yaml         ← CPU-based HPA, 2→8 replicas
+│   ├── 08-prometheus-rbac.yaml
+│   ├── 09-prometheus-config.yaml  ← pod-based service discovery
+│   ├── 10-prometheus.yaml
+│   ├── 11-grafana.yaml
+│   ├── 12-loadgen-job.yaml        ← triggers the HPA on demand
+│   ├── kustomization.yaml
+│   └── DEPLOY.md                 ← step-by-step local deploy runbook
 ├── demo.sh
 └── README.md
 ```
@@ -387,6 +400,48 @@ python -m services.mcp_server.server
 
 ---
 
+## Kubernetes Deployment (Local)
+
+The full six-service stack — Redis, API, Scheduler, Worker fleet, Prometheus, Grafana — also runs on Kubernetes, deployed and load-tested locally on `kind`. This turns the "Kubernetes + HPA" line further down from an aspirational future extension into something actually run and measured.
+
+Manifests live in [`k8s/`](./k8s/); a full step-by-step runbook (cluster creation, metrics-server setup, image build/load, deploy, and the autoscaling demo) is in [`k8s/DEPLOY.md`](./k8s/DEPLOY.md).
+
+### What's deployed
+
+- **Redis, API, Scheduler, Worker** as separate Deployments + Services, sharing config through one ConfigMap (`REDIS_URL`, `SLO_DEADLINE_SEC`) and a Secret (`OPENAI_API_KEY`)
+- **HorizontalPodAutoscaler** on the worker Deployment — CPU-based, `minReplicas: 2`, `maxReplicas: 8`, 50% target utilization
+- **Liveness/readiness probes** on every service: HTTP `/healthz` for the API, TCP checks for Redis/Scheduler/Worker, HTTP health checks for Prometheus/Grafana
+- **RBAC-scoped Prometheus** using `kubernetes_sd_configs` (pod-role service discovery via a dedicated ServiceAccount + ClusterRole) instead of docker-compose's static target list, so worker replicas the HPA adds are scraped automatically instead of silently going unmonitored
+- **Unique per-pod `WORKER_ID`** via the Kubernetes downward API (`metadata.name`) — replaces docker-compose's static `worker1`/`worker2` container names, which would otherwise collide across autoscaled replicas writing to the same Redis heartbeat/inflight keys
+- A one-shot load-generator Job (`k8s/12-loadgen-job.yaml`) that submits enough `torch_cnn` jobs to actually trigger the HPA on demand
+
+### Bugs this surfaced
+
+Two real dependency issues only showed up once the api/agent/mcp requirement sets were actually installed together and more than one worker replica actually ran side by side — neither would have been caught under `docker compose up` with a single worker pair, since nobody had run that combination before:
+
+1. `services/api/Dockerfile` installed only `api/requirements.txt`, but `api/main.py` imports the LangGraph, Google ADK, and MCP modules directly at startup — those packages live in separate requirement files that never made it into the api image. Fixed by installing all three requirement files into one image.
+2. Pinned `fastapi==0.115.0` / `uvicorn==0.30.6` in `api/requirements.txt` conflicted with `google-adk`, which requires `fastapi>=0.133` and `uvicorn>=0.34.0` at every released version. Fixed by loosening those pins to compatible ranges (resolves to `fastapi==0.139.0`, `uvicorn==0.51.0`).
+
+### Verified autoscaling run
+
+Applied the load-generator Job against a live `kind` cluster and watched `kubectl get hpa worker-hpa -n aiclusterx --watch`:
+
+| Elapsed | CPU (target 50%) | Worker replicas |
+|---|---|---|
+| 0:00 | 1% | 2 (baseline) |
+| 0:10 | 223% | 2 |
+| 0:25 | 249% | 4 |
+| 0:55 | 124% | 6 |
+| 1:25 | 83% | **8 (max)** |
+
+The worker fleet scaled from 2 → 8 replicas in ~75 seconds under sustained CPU load, with each new pod reaching `Running`/`1/1 Ready` in ~5 seconds. All 7 pods (api, scheduler, 2 baseline workers, redis, prometheus, grafana) stayed healthy throughout, and Prometheus's pod-based service discovery picked up every new worker replica automatically, with no config changes needed as the fleet grew.
+
+### Reproducing this
+
+Needs `kind` (or `minikube`) plus `metrics-server` — not bundled with `kind` by default, install steps are in `k8s/DEPLOY.md`. Everything else (image build, secret creation, `kubectl apply -k k8s/`) is one command per step.
+
+---
+
 ## Tech Stack
 
 | Layer | Technology |
@@ -398,8 +453,9 @@ python -m services.mcp_server.server
 | Queue | Redis priority queues (high / med / low) · deadline-aware scheduling |
 | ML Simulation | PyTorch CNN · DDP mock · NumPy matmul / conv |
 | Monitoring | Prometheus · Grafana · 20+ custom metrics |
-| Containerization | Docker Compose · multi-service stack |
-| Cloud | AWS EC2 · GCP · Kubernetes-ready (HPA) |
+| Containerization | Docker Compose · Kubernetes (kind) — see [Kubernetes Deployment](#kubernetes-deployment-local) |
+| Orchestration | HPA (CPU-based autoscaling, verified 2→8 replicas) · RBAC · liveness/readiness probes |
+| Cloud | AWS EC2 · GCP (not yet deployed) |
 
 ---
 
@@ -421,13 +477,14 @@ python -m services.mcp_server.server
 
 **Energy Efficiency:** Reduces load variance by 23% through power-aware dispatch, with simulated GPU telemetry and a future hook for nvidia-smi integration.
 
-**DevOps Maturity:** CI/CD-ready stack with full Kubernetes support and a 95% reduction in setup time compared to manual orchestration.
+**DevOps Maturity:** 95% reduction in setup time versus manual orchestration via `docker compose up --build`; also deployed on Kubernetes with a verified CPU-based HPA scaling worker replicas 2→8 under load — see [Kubernetes Deployment](#kubernetes-deployment-local).
 
 ---
 
 ## Future Extensions
 
-- Kubernetes + Horizontal Pod Autoscaler
+- ~~Kubernetes + Horizontal Pod Autoscaler~~ — done, see [Kubernetes Deployment](#kubernetes-deployment-local)
+- Ingress + cloud deployment (EKS/GKE) — currently local-only (`kind`)
 - RL-based dynamic scheduler (Deep Q policy)
 - GPU telemetry via nvidia-smi
 - Web control panel (React + FastAPI)
